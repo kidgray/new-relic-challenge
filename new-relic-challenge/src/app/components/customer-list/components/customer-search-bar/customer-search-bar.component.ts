@@ -31,7 +31,7 @@ export class CustomerSearchBarComponent {
   }
 
   onInputText(): void {
-    // NOTE: Handling the URL this way is VERY cumbersome. I am only doing it because
+    // NOTE: Handling the URL this way is cumbersome. I am only doing it because
     // the exercise specs specify that searching should happen AS YOU TYPE into the search bar,
     // i.e. no submit or enter button click is expected, although a button is how I would normally do it
     let newUrl: string;

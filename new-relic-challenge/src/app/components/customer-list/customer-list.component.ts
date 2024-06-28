@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Params } from "@angular/router";
 import { Subscription } from 'rxjs';
@@ -20,36 +25,43 @@ import { CustomerSearchBarComponent } from './components/customer-search-bar/cus
 export class CustomerListComponent implements OnDestroy {
   customers: Customer[];
 
+  customersSubscription: Subscription;
   queryParamsSubscription: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private customersService: CustomersService
+    private customersService: CustomersService,
+    private cdr: ChangeDetectorRef
   ) {
-    this.customers = this.customersService.customersTest;
+
+    this.customersSubscription = this.customersService.customersSubject
+      .subscribe((customers: Customer[]) => {
+        this.customers = customers;
+
+        // Since we are using the OnPush change detection strategy for optimization purposes,
+        // we need to tell Angular to check for changes after updating non-Input/Output variables
+        this.cdr.detectChanges();
+      });
 
     this.queryParamsSubscription = this.activatedRoute.queryParams
       .subscribe((params: Params) => {
         if (params['search']) {
-          this.searchByName(params['search']);
+          this.searchByName(this.customers, params['search']);
         }
       });
+
+    this.customersService.getCustomers();
   }
 
   ngOnDestroy(): void {
     // It's important to unsubscribe from observables when destroying components
     // in order to avoid memory leaks
+    this.customersSubscription.unsubscribe();
     this.queryParamsSubscription.unsubscribe();
   }
 
-  searchByName(name: string): void {
-    if (name.length > 0) {
-      this.customers = this.customersService.customersTest.filter((customer: Customer) => {
-        return customer.firstName.toLowerCase() === name.toLowerCase()
-          || customer.lastName.toLowerCase() === name.toLowerCase();
-      });
-    } else {
-      this.customers = this.customersService.customersTest;
-    }
+  searchByName(customers: Customer[], name: string): void {
+    this.customersService.searchByName(customers, name);
+    this.cdr.detectChanges();
   }
 }
