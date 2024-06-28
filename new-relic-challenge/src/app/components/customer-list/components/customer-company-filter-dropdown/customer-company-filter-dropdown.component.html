@@ -3,6 +3,6 @@
   (ngModelChange)="onCompanySelected($event)"
   [ngModel]="selectedCompany"
 >
-  <option selected>{{ allCompanies }}</option>
+  <option>{{ allCompanies }}</option>
   <option *ngFor="let company of customerCompanies">{{ company }}</option>
 </select>

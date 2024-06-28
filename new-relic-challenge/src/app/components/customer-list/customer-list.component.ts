@@ -2,7 +2,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  OnDestroy } from '@angular/core';
+  OnInit,
+  OnDestroy
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Params } from "@angular/router";
 import { Subscription } from 'rxjs';
@@ -24,7 +26,7 @@ import { CustomerCompanyFilterDropdownComponent } from "./components/customer-co
   styleUrls: ['./customer-list.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CustomerListComponent implements OnDestroy {
+export class CustomerListComponent implements OnInit, OnDestroy {
   customers: Customer[];
   customerCompanies: string[];
   customersSubscription: Subscription;
@@ -36,6 +38,9 @@ export class CustomerListComponent implements OnDestroy {
     private cdr: ChangeDetectorRef
   ) {
 
+  }
+
+  ngOnInit(): void {
     this.customersSubscription = this.customersService.customersSubject
       .subscribe((customers: Customer[]) => {
         this.customers = customers;
@@ -50,6 +55,8 @@ export class CustomerListComponent implements OnDestroy {
       .subscribe((params: Params) => {
         if (params['search']) {
           this.customersService.getCustomersByName(params['search']);
+        } else if (params['filter_by_company_name']) {
+          this.customersService.filterCustomersByCompany(params['filter_by_company_name']);
         } else {
           this.customersService.getCustomers();
         }

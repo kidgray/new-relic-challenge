@@ -30,13 +30,18 @@ app.get('', (req, res) => {
           SELECT *
           FROM customers AS c
           WHERE c.first_name ILIKE '${req.query.search}'
-          OR c.last_name ILIKE '${req.query.search}'
+          OR c.last_name ILIKE '${req.query.search}';
     `
-  }
-  else {
+  } else if (req.query.filter_by_company_name) {
+    query = `
+          SELECT *
+          FROM customers AS c
+          WHERE c.company ILIKE '${req.query.filter_by_company_name}';
+    `
+  } else {
     query = `
         SELECT *
-        FROM customers
+        FROM customers;
   `;
   }
 

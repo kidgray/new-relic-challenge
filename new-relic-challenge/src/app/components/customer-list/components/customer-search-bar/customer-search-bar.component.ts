@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output, OnDestroy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Output,
+  OnInit,
+  OnDestroy
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Params } from "@angular/router";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -18,7 +25,7 @@ import { Subscription } from "rxjs";
   styleUrls: ['./customer-search-bar.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CustomerSearchBarComponent implements OnDestroy {
+export class CustomerSearchBarComponent implements OnInit, OnDestroy {
 
   @Output() nameToSearchFor: EventEmitter<string> = new EventEmitter<string>();
   @Output() urlToSearchFor: EventEmitter<string> = new EventEmitter<string>();
@@ -32,6 +39,10 @@ export class CustomerSearchBarComponent implements OnDestroy {
   // name: FormControl<string | null> = new FormControl(this.queryParams['search']);
   name: FormControl<string | null>;
   constructor(private activatedRoute: ActivatedRoute) {
+
+  }
+
+  ngOnInit(): void {
     this.queryParamsSubscription = this.activatedRoute.queryParams
       .subscribe((queryParams: Params) => {
         this.queryParams = queryParams;
