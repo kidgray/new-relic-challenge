@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -27,6 +26,7 @@ export class CustomerListComponent implements OnDestroy {
 
   customersSubscription: Subscription;
   queryParamsSubscription: Subscription;
+  subscriptions: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -46,11 +46,11 @@ export class CustomerListComponent implements OnDestroy {
     this.queryParamsSubscription = this.activatedRoute.queryParams
       .subscribe((params: Params) => {
         if (params['search']) {
-          this.searchByName(this.customers, params['search']);
+          this.customersService.getCustomersByName(params['search']);
+        } else {
+          this.customersService.getCustomers();
         }
       });
-
-    this.customersService.getCustomers();
   }
 
   ngOnDestroy(): void {
@@ -62,6 +62,5 @@ export class CustomerListComponent implements OnDestroy {
 
   searchByName(customers: Customer[], name: string): void {
     this.customersService.searchByName(customers, name);
-    this.cdr.detectChanges();
   }
 }

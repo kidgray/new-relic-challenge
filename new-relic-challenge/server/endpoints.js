@@ -20,17 +20,25 @@ pool.connect((err) => {
 // CRUD endpoint imports would usually go here, but since this is a simple app,
 // I'll just make them in this file
 
-app.get('/search', (req, res) => {
-  console.log(req);
-})
-
 // This simply gets all our customers - it is the base query that will be used
 // to populate the table at the beginning
 app.get('', (req, res) => {
-  const query = `
+  let query;
+
+  if (req.query.search) {
+    query = `
+          SELECT *
+          FROM customers AS c
+          WHERE c.first_name ILIKE '${req.query.search}'
+          OR c.last_name ILIKE '${req.query.search}'
+    `
+  }
+  else {
+    query = `
         SELECT *
         FROM customers
   `;
+  }
 
   pool.query(query, (err, result) => {
     if (err) {
