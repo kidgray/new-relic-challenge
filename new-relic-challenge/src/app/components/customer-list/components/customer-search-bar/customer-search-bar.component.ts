@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from "@angular/router";
-
+import { RouterModule, ActivatedRoute, Params } from "@angular/router";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { Subscription } from "rxjs";
 
 
 @Component({
@@ -18,16 +18,32 @@ import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
   styleUrls: ['./customer-search-bar.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CustomerSearchBarComponent {
+export class CustomerSearchBarComponent implements OnDestroy {
 
   @Output() nameToSearchFor: EventEmitter<string> = new EventEmitter<string>();
   @Output() urlToSearchFor: EventEmitter<string> = new EventEmitter<string>();
+
+  // We will need the query params to initialize the value of the search bar
+  // when we have an active search term
+  queryParams: Params;
+  queryParamsSubscription: Subscription;
   // Why only a FormControl and not a FormGroup? Because we only need
   // to keep track of one control - the name field
-  name: FormControl<string | null> = new FormControl('');
+  // name: FormControl<string | null> = new FormControl(this.queryParams['search']);
+  name: FormControl<string | null>;
+  constructor(private activatedRoute: ActivatedRoute) {
+    this.queryParamsSubscription = this.activatedRoute.queryParams
+      .subscribe((queryParams: Params) => {
+        this.queryParams = queryParams;
 
-  constructor() {
+        // Initialize the form name to the value of the query params, if one exists
+        // Otherwise, initialize to the empty string
+        this.name = new FormControl(this.queryParams['search'] ?? '');
+      })
+  }
 
+  ngOnDestroy(): void {
+    this.queryParamsSubscription.unsubscribe();
   }
 
   onInputText(): void {
@@ -46,6 +62,8 @@ export class CustomerSearchBarComponent {
       this.nameToSearchFor.emit('');
     }
 
+    // Replaces the URL without refreshing the page - again, this is
+    // somewhat cumbersome/messy
     window.history.replaceState({}, '', newUrl);
   }
 }

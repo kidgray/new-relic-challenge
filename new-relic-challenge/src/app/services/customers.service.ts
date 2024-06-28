@@ -26,8 +26,4 @@ export class CustomersService {
         this.customersSubject.next(customers);
       })
   }
-
-  searchByName(customers: Customer[], name: string): void {
-    this.getCustomersByName(name);
-  }
 }

@@ -23,10 +23,8 @@ import { CustomerSearchBarComponent } from './components/customer-search-bar/cus
 })
 export class CustomerListComponent implements OnDestroy {
   customers: Customer[];
-
   customersSubscription: Subscription;
   queryParamsSubscription: Subscription;
-  subscriptions: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -60,7 +58,7 @@ export class CustomerListComponent implements OnDestroy {
     this.queryParamsSubscription.unsubscribe();
   }
 
-  searchByName(customers: Customer[], name: string): void {
-    this.customersService.searchByName(customers, name);
+  searchByName(name: string): void {
+    this.customersService.getCustomersByName(name);
   }
 }
