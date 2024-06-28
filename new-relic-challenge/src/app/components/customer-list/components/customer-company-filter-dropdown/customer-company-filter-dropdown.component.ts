@@ -1,17 +1,12 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
-  OnDestroy,
-  OnInit,
   Output
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from "@angular/forms";
-import { Subscription } from "rxjs";
-import { ActivatedRoute, Params, RouterModule } from "@angular/router";
 
 import { ALL_COMPANIES } from "../../../../constants/constants";
 
@@ -20,43 +15,21 @@ import { ALL_COMPANIES } from "../../../../constants/constants";
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
-    RouterModule
+    FormsModule
   ],
   templateUrl: './customer-company-filter-dropdown.component.html',
   styleUrls: ['./customer-company-filter-dropdown.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CustomerCompanyFilterDropdownComponent implements OnInit, OnDestroy {
+export class CustomerCompanyFilterDropdownComponent {
 
   @Input() customerCompanies: string[] = [];
   @Output() companyToFilterOn: EventEmitter<string> = new EventEmitter<string>();
   allCompanies: string = ALL_COMPANIES;
   selectedCompany: string;
 
-  // Same idea as the customer search bar - we will use the query param
-  // value to initialize the dropdown bar's default value
-  queryParams: Params;
-  queryParamsSubscription: Subscription;
+  constructor() {
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private cdr: ChangeDetectorRef
-  ) {
-
-  }
-
-  ngOnInit(): void {
-    this.queryParamsSubscription = this.activatedRoute.queryParams
-      .subscribe((params: Params) => {
-        this.queryParams = params;
-        this.selectedCompany = this.queryParams['filter_by_company_name'] ?? this.allCompanies;
-        this.cdr.detectChanges();
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.queryParamsSubscription.unsubscribe();
   }
 
   onCompanySelected(company: string): void {
