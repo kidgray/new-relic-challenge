@@ -26,4 +26,11 @@ export class CustomersService {
         this.customersSubject.next(customers);
       })
   }
+
+  filterCustomersByCompany(companyName: string): void {
+    this.http.get<Customer[]>(`http://localhost:3000/?filter_by_company_name=${companyName}`)
+      .subscribe((customers: Customer[]) => {
+        this.customersSubject.next(customers);
+      })
+  }
 }

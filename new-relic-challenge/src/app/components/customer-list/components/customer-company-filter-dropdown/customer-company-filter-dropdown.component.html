@@ -1,0 +1,8 @@
+<select
+  class="form-select filter-by-company-dropdown"
+  (ngModelChange)="onCompanySelected($event)"
+  [ngModel]="selectedCompany"
+>
+  <option selected>{{ allCompanies }}</option>
+  <option *ngFor="let company of customerCompanies">{{ company }}</option>
+</select>

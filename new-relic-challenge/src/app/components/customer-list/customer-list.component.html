@@ -1,5 +1,11 @@
 <div class="container customer-list">
   <app-customer-search-bar (nameToSearchFor)="searchByName($event)"></app-customer-search-bar>
+  <div class="filter-and-sort-div">
+    <app-customer-company-filter-dropdown
+      [customerCompanies]="customerCompanies"
+      (companyToFilterOn)="filterByCompany($event)"
+    ></app-customer-company-filter-dropdown>
+  </div>
   <table class="table table-bordered customers-table">
     <thead>
       <tr>

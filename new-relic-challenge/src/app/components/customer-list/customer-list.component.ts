@@ -10,12 +10,15 @@ import { Subscription } from 'rxjs';
 import { Customer } from "../../interfaces/customer.interfaces";
 import { CustomersService } from "../../services/customers.service";
 import { CustomerSearchBarComponent } from './components/customer-search-bar/customer-search-bar.component';
+import { CustomerCompanyFilterDropdownComponent } from "./components/customer-company-filter-dropdown/customer-company-filter-dropdown.component";
+
 @Component({
   selector: 'app-customer-list',
   standalone: true,
   imports: [
     CommonModule,
-    CustomerSearchBarComponent
+    CustomerSearchBarComponent,
+    CustomerCompanyFilterDropdownComponent
   ],
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.less'],
@@ -23,6 +26,7 @@ import { CustomerSearchBarComponent } from './components/customer-search-bar/cus
 })
 export class CustomerListComponent implements OnDestroy {
   customers: Customer[];
+  customerCompanies: string[];
   customersSubscription: Subscription;
   queryParamsSubscription: Subscription;
 
@@ -35,6 +39,7 @@ export class CustomerListComponent implements OnDestroy {
     this.customersSubscription = this.customersService.customersSubject
       .subscribe((customers: Customer[]) => {
         this.customers = customers;
+        this.customerCompanies = customers.map((customer: Customer) => customer.company);
 
         // Since we are using the OnPush change detection strategy for optimization purposes,
         // we need to tell Angular to check for changes after updating non-Input/Output variables
@@ -60,5 +65,9 @@ export class CustomerListComponent implements OnDestroy {
 
   searchByName(name: string): void {
     this.customersService.getCustomersByName(name);
+  }
+
+  filterByCompany(companyName: string): void {
+    this.customersService.filterCustomersByCompany(companyName);
   }
 }
