@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 
 import { Customer } from "../interfaces/customer.interfaces";
@@ -13,22 +13,22 @@ export class CustomersService {
 
   constructor(private http: HttpClient) { }
 
-  getCustomers(): void {
-    this.http.get<Customer[]>('http://localhost:3000')
+  getCustomers(): Subscription {
+    return this.http.get<Customer[]>('http://localhost:3000')
       .subscribe((customers: Customer[]) => {
         this.customersSubject.next(customers);
       })
   }
 
-  getCustomersByName(name: string): void {
-    this.http.get<Customer[]>(`http://localhost:3000/?search=${name}`)
+  getCustomersByName(name: string): Subscription {
+    return this.http.get<Customer[]>(`http://localhost:3000/?search=${name}`)
       .subscribe((customers: Customer[]) => {
         this.customersSubject.next(customers);
       })
   }
 
-  filterCustomersByCompany(companyName: string): void {
-    this.http.get<Customer[]>(`http://localhost:3000/?filter_by_company_name=${companyName}`)
+  filterCustomersByCompany(companyName: string): Subscription {
+    return this.http.get<Customer[]>(`http://localhost:3000/?filter_by_company_name=${companyName}`)
       .subscribe((customers: Customer[]) => {
         this.customersSubject.next(customers);
       })

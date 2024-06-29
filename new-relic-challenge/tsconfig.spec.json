@@ -12,6 +12,7 @@
     "src/setup.jest.ts"
   ],
   "include": [
+    "server/**/*.spec.ts",
     "src/**/*.spec.ts",
     "src/**/*.d.ts"
   ]

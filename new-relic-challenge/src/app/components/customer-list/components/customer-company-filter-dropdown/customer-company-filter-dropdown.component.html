@@ -4,6 +4,17 @@
   (ngModelChange)="onCompanySelected($event)"
   [ngModel]="selectedCompany"
 >
-  <option>{{ allCompanies }}</option>
-  <option *ngFor="let company of customerCompanies">{{ company }}</option>
+  <option
+    selected
+    class="all-companies-dropdown-option"
+    data-testid="all-companies-dropdown-option"
+  >
+    {{ allCompanies }}
+  </option>
+  <option
+    class="company-dropdown-option-{{i}}"
+    *ngFor="let company of customerCompanies; let i = index"
+  >
+    {{ company }}
+  </option>
 </select>
