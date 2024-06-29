@@ -1,39 +1,11 @@
-# NewRelicChallenge
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.5.
-
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-
 # NEW RELIC CUSTOMER LIST APP/TECHNICAL CHALLENGE
 
 This is a programming challenge that involves creating an app that allows users to view and filter a list of customers in a variety of ways.
 
 As per the assignment specifications, 2 basic functionalities will be included at the outset:
 
-A.) SEARCH by a customer's first name OR last name via a text input field,
-B.) FILTER by a customer's company name via a select dropdown
+1. SEARCH by a customer's first name OR last name via a text input field
+2. FILTER by a customer's company name via a select dropdown
 
 # Table of contents
 - [Table of contents](#table-of-contents)
@@ -153,43 +125,65 @@ Copy the contents of settings-example.js into it. Enter the credentials used to 
 to your PostgreSQL database in the fields of the settings object. This is necessary in order
 for the backend to establish a connection to PostgreSQL.
 
+
 # Usage
 [(Back to top)](#table-of-contents)
 
-Since this project only includes a Back-end, there is no UI with which to test the functionality. Consequently, if you wish to test the functionality yourself,
-you will have to use some kind of platform that allows you to send HTTP requests and receive responses. I am using Postman. Of course, in order to test this locally,
-you must install the dependencies and run the server (see Installation section).
+## Viewing customer data
 
-## Creating an Account (User)
+To view all customer data, simply navigate to ```http://localhost:4200``` after running
+the client and server.
 
-To create a User, send a POST request to the /register endpoint. Upon successful creation, the new user that has been created will be returned as a response.
-The required payload and response are:
+![View All Customers](./assets/pictures/View%20All%20Customers.png "View All Customers")
 
-![Register Endpoint Test](./Register%20Endpoint%20Test.png "Register Endpoint Test")
+## Search by first name
+
+To search for a customer by first name, simply type the first name into the search bar. The
+first name will be stored as a query parameter in the URL as you type it into the search box
+(as per assignment specifications).
+
+![Search by First Name](./assets/pictures/Search%20By%20First%20Name.png "Search by First Name")
+
+## Search by last name
+
+To search for a customer by last name, simply type the last name into the search bar. The
+last name will be stored as a query parameter in the URL as you type it into the search box
+(as per assignment specifications).
+
+![Search by Last Name](./assets/pictures/Search%20By%20Last%20Name.png "Search by Last Name")
+
+## Filter by Company
+
+To filter the list by company, click the company dropdown box and select the company you would like to
+filter on. The company name will be saved in the query parameters as per assignment specifications.
+
+![Filter by Company Name](./assets/pictures/Filter%20by%20Company.png)
 
 # Q & A
 [(Back to top)](#table-of-contents)
 
-### Why did you use an auto-incremented INTEGER for ids? Isn't that a bit unsafe?
+This section will serve as a discussion of the project's structure in the form of a Q & A.
 
-Typically I would use something like a UUID for ids, but SQLite doesn't support a BOOLEAN(16) type for ids, and storing UUIDs in a STRING
-would complicate the implementation of the pivot tables, so I decided to keep it simple and just use auto-incremented integers.
+### Why did you choose to return Subscriptions from the API calls in the service rather than subscribing in the service itself?
 
-### Why did you use the STRING type for Posts? Posts can contain images or videos too, can't they?
+In the project, I chose to keep my subscriptions in the components for two main reasons:
 
-This is a similar question to the one above, and the answer is similar as well. I'd typically use something like a BLOB for a post,
-but for simplicity's sake I decided to stick to just the bare basics of what constitutes a post (text). This should suffice for the
-purposes of this exercise.
+1. It makes the service easier to test, since the methods can be subscribed to
+2. It makes it less likely for a memory leak to occur, since you can unsubscribe in the component's onDestroy method (when the component is destroyed)
 
-### Why are you using sync() instead of migrations? Aren't migrations better and more reliable/efficient?
+### Why are you using the onPush change detection strategy?
 
-Yes, but they're also more time-consuming to set up, and unfortunately, I'm on a bit of a tight schedule.
+For optimization purposes. This prevents unnecessary re-renders of Angular components. For a project
+this small, it hardly matters, but it's still nice to have.
 
-### Why did you use .then() for the /users route but async/await for every other route?
+### Why did you decide to use PostgreSQL?
 
-Basically just to demonstrate that I can work with both promise chaining and async/await syntax. Since that route
-is there just for testing, it's the ideal place to do it.
+I simply wanted to practice working with it. I did not particularly need the consistency of a 
+relational DB, and joins were not necessary either, so these things did not factor in to my 
+decision of what DB to use.
 
-### Why did you include a .env file in the repo? Isn't that a security risk?
+### Why aren't there any tests for the customer-list component?
 
-Again, this was done for demo purposes. I typically wouldn't do this (or use a simple string for the secret key, for that matter).
+Unfortunately, I ran out of time to work on the assignment. I tried to include as many unit tests
+as possible, but I am currently taking part in numerous interview processes and am therefore pressed
+for time.
