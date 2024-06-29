@@ -95,7 +95,7 @@ Please download (copy/paste, drag/drop, etc) this file.
 You will need to create a new Database into which the backup can be restored. To do this, right click
 on the Databases icon of pgAdmin 4, click Create, and click Database.
 
-![Create Database](./assets/pictures/Create%20Database.png "Create Database")
+![Create Database](./new-relic-challenge/assets/pictures/Create%20Database.png "Create Database")
 
 You may name the database anything you like, but I named mine
 
@@ -105,8 +105,8 @@ Restore the backup data by right clicking on your new database and clicking "Res
 dropdown menu that appears, then providing the backup file in the Filename input on the modal
 that appears.
 
-![Restore Database](./assets/pictures/Restore%20Database.png "Restore Database")
-![Database Filename](./assets/pictures/Filename.png "Database Filename")
+![Restore Database](./new-relic-challenge/assets/pictures/Restore%20Database.png "Restore Database")
+![Database Filename](./new-relic-challenge/assets/pictures/Filename.png "Database Filename")
 
 Once this process is complete, your database will contain the same rows as the ones in my local
 environment. This completes the seeding process.
@@ -134,7 +134,7 @@ for the backend to establish a connection to PostgreSQL.
 To view all customer data, simply navigate to ```http://localhost:4200``` after running
 the client and server.
 
-![View All Customers](./assets/pictures/View%20All%20Customers.png "View All Customers")
+![View All Customers](./new-relic-challenge/assets/pictures/View%20All%20Customers.png "View All Customers")
 
 ## Search by first name
 
@@ -142,7 +142,7 @@ To search for a customer by first name, simply type the first name into the sear
 first name will be stored as a query parameter in the URL as you type it into the search box
 (as per assignment specifications).
 
-![Search by First Name](./assets/pictures/Search%20By%20First%20Name.png "Search by First Name")
+![Search by First Name](./new-relic-challenge/assets/pictures/Search%20By%20First%20Name.png "Search by First Name")
 
 ## Search by last name
 
@@ -150,14 +150,14 @@ To search for a customer by last name, simply type the last name into the search
 last name will be stored as a query parameter in the URL as you type it into the search box
 (as per assignment specifications).
 
-![Search by Last Name](./assets/pictures/Search%20By%20Last%20Name.png "Search by Last Name")
+![Search by Last Name](./new-relic-challenge/assets/pictures/Search%20By%20Last%20Name.png "Search by Last Name")
 
 ## Filter by Company
 
 To filter the list by company, click the company dropdown box and select the company you would like to
 filter on. The company name will be saved in the query parameters as per assignment specifications.
 
-![Filter by Company Name](./assets/pictures/Filter%20by%20Company.png)
+![Filter by Company Name](./new-relic-challenge/assets/pictures/Filter%20by%20Company.png)
 
 # Q & A
 [(Back to top)](#table-of-contents)
