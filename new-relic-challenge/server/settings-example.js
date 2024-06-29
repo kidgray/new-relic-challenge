@@ -8,3 +8,5 @@ const settings = {
   password: '',
   port: 5432
 }
+
+module.exports = settings;

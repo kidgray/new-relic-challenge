@@ -39,7 +39,6 @@ B.) FILTER by a customer's company name via a select dropdown
 - [Table of contents](#table-of-contents)
 - [Installation](#installation)
 - [Setting up the database connection](#setting-up-the-database-connection)
-- [Explanation](#explanation)
 - [Usage](#usage)
 - [Q&A](#q%20&%20a)
 
@@ -49,6 +48,23 @@ B.) FILTER by a customer's company name via a select dropdown
 Navigate to the directory in which you want to install the project, then run the following command:
 
 ```git clone https://github.com/kidgray/new-relic-challenge.git```
+
+**You will need:**
+
+  Node
+  NPM
+  Angular CLI
+
+To install Node, please navigate to
+
+```nodejs.org```
+
+and click on the "Download" link at the top of the page, then follow the instructions.
+
+Once Node and NPM are installed, you will need to install Angular CLI. 
+To do so, open a terminal window and run the following command:
+
+```npm install -g @angular/cli```
 
 To install the project dependencies, navigate to the root directory of the cloned project and use
 the following command:
@@ -76,16 +92,66 @@ OR
 
 Upon success, the app may be accessed at:
 
-    http://localhost:4200
+```http://localhost:4200```
+
+## Running unit tests
+
+While in the root directory, run `ng test` to execute the unit tests.
 
 # Setting up the database connection
 [(Back to top)](#table-of-contents)
 
-This app uses PostgreSQL to store data.
+This app uses PostgreSQL to store data. **Consequently, you will need to install the following:**
 
-# Explanation
-[(Back to top)](#table-of-contents)
+  PostgreSQL
+  pgAdmin 4
 
+**pgAdmin 4 is necessary in order to have a smooth setup experience**. You will need to set up
+your PostgreSQL server with pgAdmin 4 such that you can manage databases.
+
+## Restoring the seed data
+
+I used a SQL query to seed my database with customer data. That data has been backed up and provided
+in the repository.
+
+Please navigate to the assets folder in the root directory. There, you will find the file:
+
+  new_relic_customers_db.sql
+
+Please download (copy/paste, drag/drop, etc) this file.
+
+You will need to create a new Database into which the backup can be restored. To do this, right click
+on the Databases icon of pgAdmin 4, click Create, and click Database.
+
+![Create Database](./assets/pictures/Create%20Database.png "Create Database")
+
+You may name the database anything you like, but I named mine
+
+  new_relic_customers
+
+Restore the backup data by right clicking on your new database and clicking "Restore..." on the
+dropdown menu that appears, then providing the backup file in the Filename input on the modal
+that appears.
+
+![Restore Database](./assets/pictures/Restore%20Database.png "Restore Database")
+![Database Filename](./assets/pictures/Filename.png "Database Filename")
+
+Once this process is complete, your database will contain the same rows as the ones in my local
+environment. This completes the seeding process.
+
+## Creating a settings.js file for your database connection
+
+Navigate to the "server" folder in the root directory. There will be a file named 
+
+  settings-example.js
+
+In the same directory (i.e. the server folder), create a new file named
+
+  settings.js
+
+Copy the contents of settings-example.js into it. Enter the credentials used to connect
+to your PostgreSQL database in the fields of the settings object. This is necessary in order
+for the backend to establish a connection to PostgreSQL.
 
 # Usage
 [(Back to top)](#table-of-contents)
