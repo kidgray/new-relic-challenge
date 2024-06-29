@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Params } from "@angular/router";
-import { Subscription } from 'rxjs';
+import { Subscription, switchMap } from 'rxjs';
 
 import { Customer } from "../../interfaces/customer.interfaces";
 import { CustomersService } from "../../services/customers.service";
@@ -30,6 +30,8 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   customers: Customer[];
   customerCompanies: string[];
   customersSubscription: Subscription;
+  searchByNameSubscription: Subscription;
+  filterByCompanySubscription: Subscription;
   queryParamsSubscription: Subscription;
 
   constructor(
@@ -52,14 +54,19 @@ export class CustomerListComponent implements OnInit, OnDestroy {
       });
 
     this.queryParamsSubscription = this.activatedRoute.queryParams
-      .subscribe((params: Params) => {
-        if (params['search']) {
-          this.customersService.getCustomersByName(params['search']);
-        } else if (params['filter_by_company_name']) {
-          this.customersService.filterCustomersByCompany(params['filter_by_company_name']);
-        } else {
-          this.customersService.getCustomers();
-        }
+      .pipe(
+        switchMap((params: Params) => {
+          if (params['search']) {
+            return this.customersService.getCustomersByName(params['search']);
+          } else if (params['filter_by_company_name']) {
+            return this.customersService.filterCustomersByCompany(params['filter_by_company_name']);
+          } else {
+            return this.customersService.getCustomers();
+          }
+        })
+      )
+      .subscribe((customers: Customer[]) => {
+        this.customersService.customersSubject.next(customers);
       });
   }
 
@@ -68,13 +75,27 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     // in order to avoid memory leaks
     this.customersSubscription.unsubscribe();
     this.queryParamsSubscription.unsubscribe();
+
+    if (this.searchByNameSubscription) {
+      this.searchByNameSubscription.unsubscribe();
+    }
+
+    if (this.filterByCompanySubscription) {
+      this.filterByCompanySubscription.unsubscribe();
+    }
   }
 
   searchByName(name: string): void {
-    this.customersService.getCustomersByName(name);
+    this.searchByNameSubscription = this.customersService.getCustomersByName(name)
+      .subscribe((customers: Customer[]) => {
+        this.customersService.customersSubject.next(customers);
+      })
   }
 
   filterByCompany(companyName: string): void {
-    this.customersService.filterCustomersByCompany(companyName);
+    this.filterByCompanySubscription = this.customersService.filterCustomersByCompany(companyName)
+      .subscribe((customers: Customer[]) => {
+        this.customersService.customersSubject.next(customers);
+      })
   }
 }
